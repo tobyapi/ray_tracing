@@ -1,5 +1,4 @@
 use std::rc::Rc;
-use std::io::{stderr, stdout, Write};
 use rand::prelude::*;
 use ray_tracing::{
     camera::*,
@@ -53,8 +52,8 @@ fn create_world() -> HittableList {
 
     let material1 = Lambertian { albedo: Color::new(0.7, 0.3, 0.3) };
     let material2 = Lambertian { albedo: Color::new(0.8, 0.8, 0.0) };
-    let material3 = Metal { albedo: Color::new(0.8, 0.6, 0.2) };
-    let material4 = Metal { albedo: Color::new(0.8, 0.8, 0.8) };
+    let material3 = Metal { albedo: Color::new(0.8, 0.6, 0.2), fuzz: 1.0 };
+    let material4 = Metal { albedo: Color::new(0.8, 0.8, 0.8), fuzz: 0.3 };
 
     let sphere1 = Sphere::new(center1, 0.5, Rc::<Lambertian>::new(material1));
     let sphere2 = Sphere::new(center2, 100.0, Rc::<Lambertian>::new(material2));
@@ -79,14 +78,11 @@ fn main() {
     println!("P3\n{} {}\n255", IMAGE_WIDTH, IMAGE_HEIGHT);
 
     let world = create_world();
-
     let cam = Camera::new();
-
     let mut rng = rand::rng();
 
     for j in (0..IMAGE_HEIGHT).rev() {
         eprint!("\rScanlines remaining: {}", j);
-        stderr().flush().unwrap();
         for i in 0..IMAGE_WIDTH {
             let mut pixel_color = Color::new(0.0, 0.0, 0.0);
             for s in 0..SAMPLES_PER_PIXEL {
