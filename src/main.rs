@@ -50,21 +50,23 @@ fn create_world() -> HittableList {
     let center3 = Point3::new(1.0, 0.0, -1.0);
     let center4 = Point3::new(-1.0, 0.0, -1.0);
 
-    let material1 = Lambertian { albedo: Color::new(0.7, 0.3, 0.3) };
-    let material2 = Lambertian { albedo: Color::new(0.8, 0.8, 0.0) };
-    let material3 = Metal { albedo: Color::new(0.8, 0.6, 0.2), fuzz: 0.0 };
-    let material4 = Directric { ref_idx: 1.5 };
+    let material1 = Rc::<Lambertian>::new(Lambertian { albedo: Color::new(0.7, 0.3, 0.3) });
+    let material2 = Rc::<Lambertian>::new(Lambertian { albedo: Color::new(0.8, 0.8, 0.0) });
+    let material3 = Rc::<Metal>::new(Metal { albedo: Color::new(0.8, 0.6, 0.2), fuzz: 0.0 });
+    let material4 = Rc::<Directric>::new(Directric { ref_idx: 1.5 });
 
-    let sphere1 = Sphere::new(center1, 0.5, Rc::<Lambertian>::new(material1));
-    let sphere2 = Sphere::new(center2, 100.0, Rc::<Lambertian>::new(material2));
-    let sphere3 = Sphere::new(center3, 0.5, Rc::<Metal>::new(material3));
-    let sphere4 = Sphere::new(center4, 0.5, Rc::<Directric>::new(material4));
+    let sphere1 = Sphere::new(center1, 0.5, material1);
+    let sphere2 = Sphere::new(center2, 100.0, material2);
+    let sphere3 = Sphere::new(center3, 0.5, material3);
+    let sphere4 = Sphere::new(center4, 0.5, material4.clone());
+    let sphere5 = Sphere::new(center4, -0.45, material4.clone());
 
     let mut world = HittableList::default();
     world.add(Rc::<Sphere>::new(sphere1));
     world.add(Rc::<Sphere>::new(sphere2));
     world.add(Rc::<Sphere>::new(sphere3));
     world.add(Rc::<Sphere>::new(sphere4));
+    world.add(Rc::<Sphere>::new(sphere5));
     world
 }
 
