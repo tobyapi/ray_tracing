@@ -54,16 +54,3 @@ impl Hittable for Sphere {
         return false;
     }
 }
-
-pub struct Lambertian {
-    pub albedo: Color
-}
-
-impl Material for Lambertian {
-    fn scatter(&self, r_in: &Ray, rec: &HitRecord, attenuation: &mut Color, scattered: &mut Ray) -> bool {
-        let scatter_direcion = rec.normal + Vec3::random_unit_vector_lambert();
-        *scattered = Ray::new(rec.point, scatter_direcion);
-        *attenuation = self.albedo;
-        true
-    }
-}

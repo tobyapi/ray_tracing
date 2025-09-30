@@ -52,13 +52,13 @@ fn create_world() -> HittableList {
 
     let material1 = Lambertian { albedo: Color::new(0.7, 0.3, 0.3) };
     let material2 = Lambertian { albedo: Color::new(0.8, 0.8, 0.0) };
-    let material3 = Metal { albedo: Color::new(0.8, 0.6, 0.2), fuzz: 1.0 };
-    let material4 = Metal { albedo: Color::new(0.8, 0.8, 0.8), fuzz: 0.3 };
+    let material3 = Metal { albedo: Color::new(0.8, 0.6, 0.2), fuzz: 0.0 };
+    let material4 = Directric { ref_idx: 1.5 };
 
     let sphere1 = Sphere::new(center1, 0.5, Rc::<Lambertian>::new(material1));
     let sphere2 = Sphere::new(center2, 100.0, Rc::<Lambertian>::new(material2));
     let sphere3 = Sphere::new(center3, 0.5, Rc::<Metal>::new(material3));
-    let sphere4 = Sphere::new(center4, 0.5, Rc::<Metal>::new(material4));
+    let sphere4 = Sphere::new(center4, 0.5, Rc::<Directric>::new(material4));
 
     let mut world = HittableList::default();
     world.add(Rc::<Sphere>::new(sphere1));
