@@ -76,16 +76,23 @@ fn main() {
     const IMAGE_HEIGHT: i32 = (IMAGE_WIDTH as f64 / ASPECT_RATIO) as i32;
     const SAMPLES_PER_PIXEL: i32 = 100;
     const MAX_DEPTH: i32 = 50;
+    let lookfrom = Point3::new(3.0, 3.0, 2.0);
+    let lookat = Point3::new(0.0, 0.0, -1.0);
+    let vup = Vec3::new(0.0, 1.0, 0.0);
+    let dist_to_focus = (lookfrom - lookat).length();
+    let aperture = 2.0;
 
     println!("P3\n{} {}\n255", IMAGE_WIDTH, IMAGE_HEIGHT);
 
     let world = create_world();
     let cam = Camera::new(
-        Point3::new(-2.0, 2.0, 1.0),
-        Point3::new(0.0, 0.0, -1.0),
-        Vec3::new(0.0, 1.0, 0.0),
-        90.0,
-        16.0 / 9.0);
+        lookfrom,
+        lookat,
+        vup,
+        20.0,
+        16.0 / 9.0,
+        aperture,
+        dist_to_focus);
     let mut rng = rand::rng();
 
     for j in (0..IMAGE_HEIGHT).rev() {
